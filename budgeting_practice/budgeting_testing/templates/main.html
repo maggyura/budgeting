@@ -1,0 +1,97 @@
+{%load static%}
+<head>
+    <title>Calculation of Expenses</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'st1.css' %}">
+</head>
+<body>
+    <div align="center" style="font-size: large">
+        <p class="p1">Add expenses by pressing "+":</p>
+    </div>
+    {%if not show_form%}
+    <form method="get">
+        <div>
+            <button class="plus" type="submit" value="1" name="plus">+</button>
+        </div>
+    </form>
+    {%else%}
+    <form method="get">
+        <div>
+            <button class="plus" type="submit" value="0" name="plus">+</button>
+        </div>
+    </form>
+    {%endif%}
+
+    {%if expense_save and saved_data%}
+    {%for data in saved_data%}
+    <div class="saved">
+        <p><b>Name:</b> {{ data.name }}</p>
+        <p><b>Description:</b> {{ data.description }}</p>
+        <p><b>Quantity:</b> {{ data.quantity }}</p>
+        <p><b>Cost of one:</b> {{ data.cost_of_one }}</p>
+        <p>---------------</p>
+        <h3>Total:{{data.total}}</h3>
+    </div>
+    {%endfor%}
+
+    {%endif%}
+
+    {%if show_form%}
+        <div>
+            <form method="post">
+                {%csrf_token%}
+                <div style="margin-top: 10px; display: inline">
+                    <label for="name">Name:</label>
+                    <input
+                        id="name"
+                        type="text"
+                        name="name"
+                    >
+                </div>
+                <div style="margin-top: 10px; margin-left: 10px; display: inline">
+                    <label for="description">Description:</label>
+                    <input
+                        id="description"
+                        type="text"
+                        name="description"
+
+                    >
+                </div>
+                <div style="margin-top: 10px; margin-left: 10px; display: inline">
+                    <label for="quantity">Quantity:</label>
+                    <input
+                            id="quantity"
+                            type="text"
+                            name="quantity"
+                    >
+                </div>
+                <div style="margin-top: 10px; margin-left: 10px; display: inline">
+                    <label for="cost_of_one">Cost of one:</label>
+                    <input
+                            id="cost_of_one"
+                            type="text"
+                            name="cost_of_one"
+                    >
+                </div>
+                <div style="display: inline">
+                    <form>
+                        <button class="create_expense" type="submit" name="create_expense" value="1">Add</button>
+                    </form>
+                </div>
+            </form>
+        </div>
+    {% endif %}
+    {%if expense_save and saved_data%}
+    <div class="start">
+        <form action="calculations" method="get">
+        <button
+                type="submit"
+                name="start"
+                value="{{budget}}"
+        >Start calculations</button>
+
+        </form>
+    </div>
+    {%endif%}
+
+</body>

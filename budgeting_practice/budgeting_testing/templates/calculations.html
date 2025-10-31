@@ -1,0 +1,75 @@
+{%load static%}
+<html lang="en">
+<head>
+    <link rel = "stylesheet" href = "{% static 'st2.css'%}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculation of Expenses</title>
+</head>
+<body>
+<h1>Overall expenses: {{budget}}</h1>
+<p style = "text-align: center">Choose months that will be taken into account:<br></p>
+
+<div align="center">
+    <h1 class="year_title">2025</h1>
+</div>
+
+<form method="post">
+{% csrf_token %}
+{% for month in months_2025 %}
+<div style="display: inline-block; text-align: center; margin: 10px;">
+    <input type="checkbox" id="month {{month}}" name="month" value="{{month}}">
+    <br>
+    <label for="month {{month}}">{{month}}</label>
+</div>
+{% endfor %}
+
+    <div align="center">
+        <h1 class = year_title style ="text-align: center">2026</h1>
+    </div>
+{% for month in months_2026 %}
+<div style="display: inline-block; text-align: center; margin: 10px;">
+    <input type="checkbox" id="month" name="month" value="{{month}}">
+    <br>
+    <label for="month">{{month}}</label>
+</div>
+{%endfor%}
+
+<div style="margin: 5px;">
+    <button type="submit" value="1" name="months">Create table</button>
+</div>
+
+</form>
+{%if show_table%}
+{%if count > 0%}
+<div class="table">
+<table>
+<tr>
+    <th>
+        Category
+    </th>
+    {%for month in checked%}
+    <th>
+        {{month}}
+    </th>
+    {%endfor%}
+</tr>
+{% for criteria in money_used %}
+        <tr>
+            <td>{{ criteria.0 }}</td>  {# name of the category #}
+            {% for month in checked %}
+                <td>
+                    {% if count > 0 %}
+                        {% widthratio criteria.1 count 1 %}
+                    {% else %}
+                        {{ criteria.1 }}
+                    {% endif %}
+                </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+</div>
+{%endif%}
+{% endif %}
+</body>
+</html>
